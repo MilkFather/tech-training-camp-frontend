@@ -11,7 +11,7 @@ class astnode {
     }
 }
 
-function markdown(src) {
+export function markdown(src) {
     let lines = breaklines(src);
     ast = new astnode('document', '');
     for (l of [... lines]) {

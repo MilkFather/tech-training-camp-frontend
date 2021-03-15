@@ -26,10 +26,11 @@ export class MarkdownEditor {
         MarkdownEditToolbarItemImage
     ]
 
-    constructor(id) {
+    constructor(id, parserfunc) {
         this.el = document.createElement('div');
         this.el.id = id;
         this.el.className = 'editor';
+        this.parserfunc = parserfunc;
         this.setChild();
     }
 
@@ -42,6 +43,7 @@ export class MarkdownEditor {
         this.el.appendChild(this.editbox.el);
         this.el.appendChild(this.preview.el);
 
+        this.preview.setMarkdownFunc = this.parserfunc;
         this.editbox.setListener();
     }
 }
@@ -54,7 +56,7 @@ class MarkdownPreview {
     }
 
     setMarkdown(md) {
-        let rendered = markdown(md);
+        let rendered = this.setMarkdownFunc(md);
         this.el.innerHTML = rendered;
     }
 }
