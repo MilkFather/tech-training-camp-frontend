@@ -41,7 +41,7 @@ export const breaklines = function(text) {
 }
 
 export const isblankline = function(line) {
-    for (chr of [... line]) {
+    for (let chr of [... line]) {
         if (!([CHAR_SPACE, CHAR_TABS].includes(chr))) {
             return false;
         }
