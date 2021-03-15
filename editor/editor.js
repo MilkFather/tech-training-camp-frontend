@@ -1,4 +1,4 @@
-import 'editor-tool.js';
+import './editor-tool.js';
 
 export class MarkdownEditor {
     el = null;
