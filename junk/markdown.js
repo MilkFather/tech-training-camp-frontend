@@ -4,7 +4,7 @@ import { consumeLine } from './blocks.js'
 export function markdown(src) {
     let lines = util.breaklines(src);
     lines = util.notrailingblankline(lines);
-    ast = new util.astnode('document', '');
+    let ast = new util.astnode('document', '');
     for (l of [... lines]) {
         // main loop
         consumeLine(l, ast);
