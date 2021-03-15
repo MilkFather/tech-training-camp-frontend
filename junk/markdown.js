@@ -1,12 +1,13 @@
 import * as util from './util.js'
+import { consumeLine } from './blocks.js'
 
 export function markdown(src) {
     let lines = util.breaklines(src);
     lines = util.notrailingblankline(lines);
-    ast = new astnode('document', '');
+    ast = new util.astnode('document', '');
     for (l of [... lines]) {
         // main loop
-        dispatchline(l, ast);
+        consumeLine(l, ast);
     }
     // close any unclosed block
     closeast(ast);
@@ -15,13 +16,6 @@ export function markdown(src) {
     // render the tree
     let htm = compileast(ast);
     return htm;
-}
-
-function dispatchline(line, ast) {
-    // h1-h6
-    if (line.match(H_REGEX)) {
-        console.log("h");
-    }
 }
 
 function closeast(ast) {
