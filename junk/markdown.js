@@ -1,18 +1,8 @@
-class astnode {
-    constructor(ntype, text) {
-        this.nodetype = ntype;
-        this.childs = [];
-        this.text = text;
-        this.closed = false;
-    }
-
-    isleaf = () => {
-        return this.childs.length <= 0;
-    }
-}
+import * as util from './util.js'
 
 export function markdown(src) {
-    let lines = breaklines(src);
+    let lines = util.breaklines(src);
+    lines = util.notrailingblankline(lines);
     ast = new astnode('document', '');
     for (l of [... lines]) {
         // main loop

@@ -1,12 +1,22 @@
-const CHAR_NEWLINE = String.fromCodePoint(0x000A);
-const CHAR_CARRIAGE_RETURN = String.fromCodePoint(0x000D);
-const CHAR_SPACE = String.fromCodePoint(0x0020);
-const CHAR_TABS = String.fromCodePoint(0x0009);
+export const CHAR_NEWLINE = String.fromCodePoint(0x000A);
+export const CHAR_CARRIAGE_RETURN = String.fromCodePoint(0x000D);
+export const CHAR_SPACE = String.fromCodePoint(0x0020);
+export const CHAR_TABS = String.fromCodePoint(0x0009);
 
-const H_REGEX = /^( ){0,3}(#){1,6}((( )+(.)*)|$)/gu
+export class astnode {
+    constructor(ntype, text) {
+        this.nodetype = ntype;
+        this.childs = [];
+        this.text = text;
+        this.closed = false;
+    }
 
+    isleaf = () => {
+        return this.childs.length <= 0;
+    }
+}
 
-breaklines = (text) => {
+export const breaklines = function(text) {
     let lines = [];
     let cached = '';
     let ptr = 0;
@@ -30,11 +40,27 @@ breaklines = (text) => {
     return lines;
 }
 
-isblankline = (line) => {
+export const isblankline = function(line) {
     for (chr of [... line]) {
         if (!([CHAR_SPACE, CHAR_TABS].includes(chr))) {
             return false;
         }
     }
     return true;
+}
+
+export const notrailingblankline = function(lines) {
+    while (lines.length > 0 && isblankline(lines[lines.length - 1])) {
+        lines.pop();
+    }
+    return lines;
+}
+
+export const tab2space = function(text) {
+    let pos;
+    const spaces = ['    ', '   ', '  ', ' '];
+    while ((pos = text.indexOf('\t')) !== -1) {
+        text = text.slice(0, pos) + spaces[pos % 4] + text.slice(pos + 1);
+    }
+    return text;
 }
