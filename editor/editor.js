@@ -1,3 +1,5 @@
+import 'editor-tool.js';
+
 export class MarkdownEditor {
     el = null;
     editbox = null;

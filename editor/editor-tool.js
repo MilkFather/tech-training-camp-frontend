@@ -24,7 +24,7 @@ class MarkdownEditToolbarItem {
     }
 }
 
-class MarkdownEditToolbarItemSave extends MarkdownEditToolbarItem {
+export class MarkdownEditToolbarItemSave extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '保存当前文件', true);
         this.el.addEventListener('click', this.saveFile);
@@ -43,7 +43,7 @@ class MarkdownEditToolbarItemSave extends MarkdownEditToolbarItem {
     }
 }
 
-class MarkdownEditToolbarItemBold extends MarkdownEditToolbarItem {
+export class MarkdownEditToolbarItemBold extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '插入粗体记号', false);
         this.el.addEventListener('click', this.addBold);
@@ -55,7 +55,7 @@ class MarkdownEditToolbarItemBold extends MarkdownEditToolbarItem {
     }
 }
 
-class MarkdownEditToolbarItemItalic extends MarkdownEditToolbarItem {
+export class MarkdownEditToolbarItemItalic extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '插入斜体记号', false);
         this.el.addEventListener('click', this.addItalic);
@@ -67,7 +67,7 @@ class MarkdownEditToolbarItemItalic extends MarkdownEditToolbarItem {
     }
 }
 
-class MarkdownEditToolbarItemUList extends MarkdownEditToolbarItem {
+export class MarkdownEditToolbarItemUList extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '插入无序列表项', false);
         this.el.addEventListener('click', this.addUList);
@@ -79,7 +79,7 @@ class MarkdownEditToolbarItemUList extends MarkdownEditToolbarItem {
     }
 }
 
-class MarkdownEditToolbarItemOList extends MarkdownEditToolbarItem {
+export class MarkdownEditToolbarItemOList extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '插入有序列表项', false);
         this.el.addEventListener('click', this.addOList);
@@ -91,7 +91,7 @@ class MarkdownEditToolbarItemOList extends MarkdownEditToolbarItem {
     }
 }
 
-class MarkdownEditToolbarItemQuote extends MarkdownEditToolbarItem {
+export class MarkdownEditToolbarItemQuote extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '插入引用项', false);
         this.el.addEventListener('click', this.addQuote);
@@ -103,7 +103,7 @@ class MarkdownEditToolbarItemQuote extends MarkdownEditToolbarItem {
     }
 }
 
-class MarkdownEditToolbarItemLink extends MarkdownEditToolbarItem {
+export class MarkdownEditToolbarItemLink extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '插入外部链接', false);
         this.el.addEventListener('click', this.addLink);
@@ -115,7 +115,7 @@ class MarkdownEditToolbarItemLink extends MarkdownEditToolbarItem {
     }
 }
 
-class MarkdownEditToolbarItemImage extends MarkdownEditToolbarItem {
+export class MarkdownEditToolbarItemImage extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '插入图片', false);
         this.el.addEventListener('click', this.addImage);
