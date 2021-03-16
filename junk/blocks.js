@@ -228,7 +228,7 @@ export const close_block = function(block, parserstatus) {
     }
     block.closed = true;
 
-    switch (block.blocktype) {
+    switch (block.nodetype) {
         case def.BLID_PARA:
         case def.BLID_HEADER:
             block.text = block.strings.join('\n');
