@@ -30,6 +30,45 @@ const makeNode = function(blid, parserstatus) {
     return newnode;
 }
 
+/* copied from reference implementation: too hard to understand */
+var parseListMarker = function(ln, offset, indent) {
+    var rest = ln.slice(offset);
+    var match;
+    var spaces_after_marker;
+    var data = { type: null,
+                 tight: true,  // lists are tight by default
+                 bulletChar: null,
+                 start: null,
+                 delimiter: null,
+                 padding: null,
+                 markerOffset: indent };
+    if (rest.match(def.RE_HRULE)) {
+        return null;
+    }
+    if ((match = rest.match(def.RE_ULMARKER))) {
+        spaces_after_marker = match[1].length;
+        data.type = 'bullet';
+        data.bulletChar = match[0][0];
+
+    } else if ((match = rest.match(def.RE_OLMARKER))) {
+        spaces_after_marker = match[3].length;
+        data.type = 'ordered';
+        data.start = parseInt(match[1]);
+        data.delimiter = match[2];
+    } else {
+        return null;
+    }
+    var blank_item = match[0].length === rest.length;
+    if (spaces_after_marker >= 5 ||
+        spaces_after_marker < 1 ||
+        blank_item) {
+        data.padding = match[0].length - spaces_after_marker + 1;
+    } else {
+        data.padding = match[0].length;
+    }
+    return data;
+};
+
 export const consumeLine = function(line, ast, parserstatus) {
     line = util.tab2space(line);
     parserstatus.oldtip = parserstatus.tip;
@@ -102,6 +141,16 @@ export const consumeLine = function(line, ast, parserstatus) {
                 }
                 break;
 
+            case def.BLID_LISTITEM:
+                if (blank_line) {
+                    linepos = first_nonspace_index;
+                } else if (indent >= container.listspec.marketOffset + container.listspec.padding) {
+                    offset += container.listspec.marketOffset + container.listspec.padding;
+                } else {
+                    all_match = false;
+                }
+                break;
+
             default: break;
         }
         if (!all_match) {
@@ -138,6 +187,7 @@ export const consumeLine = function(line, ast, parserstatus) {
 
         linepos = first_nonspace_index;
         let match;
+        let data;
 
         if (line[linepos] === '>') {
             // block quote
@@ -170,6 +220,20 @@ export const consumeLine = function(line, ast, parserstatus) {
             container = makeNode(def.BLID_HRULE, parserstatus);
             linepos = line.length - 1;
             break;
+        } else if ((data = parseListMarker(line, linepos, indent))) {
+            all_close = all_close || closeUnmatched(parserstatus);
+            linepos += data.padding;
+
+            if (t !== def.BLID_LIST || 
+                !(container.listspec.type === data.type &&
+                  container.listspec.delimiter === data.delimiter &&
+                  container.listspec.bulletChar === data.bulletChar)) {
+                container = makeNode(def.BLID_LIST, parserstatus);
+                container.listspec = data;
+            }
+
+            container = makeNode(def.BLID_LISTITEM, parserstatus);
+            container.listspec = data;
         } else {
             break;
         }

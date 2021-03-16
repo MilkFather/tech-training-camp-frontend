@@ -17,3 +17,5 @@ export const RE_HEADER = /^#{1,6}(?: +|$)/;
 export const RE_NOSPACE = /[^ \t\n]/;
 export const RE_CODEFENCE = /^`{3,}(?!.*`)|^~{3,}(?!.*~)/;
 export const RE_CLOSECODEFENCE = /^(?:`{3,}|~{3,})(?= *$)/;
+export const RE_ULMARKER = /^[*+-]( +|$)/;
+export const RE_OLMARKER = /^(\d+)([.)])( +|$)/;
