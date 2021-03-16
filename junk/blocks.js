@@ -221,7 +221,7 @@ export const consumeLine = function(line, ast, parserstatus) {
     return ast;
 }
 
-const close_block = function(block, parserstatus) {
+export const close_block = function(block, parserstatus) {
     if (block.closed) {
         return;
     }
