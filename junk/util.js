@@ -14,6 +14,11 @@ export class astnode {
     isleaf = () => {
         return this.childs.length <= 0;
     }
+
+    last_child = () => {
+        if (this.childs.length <= 0) return null;
+        return this.childs[this.childs.length - 1];
+    }
 }
 
 export const breaklines = function(text) {
@@ -38,6 +43,15 @@ export const breaklines = function(text) {
         ptr += 1;
     }
     return lines;
+}
+
+export const matchsinceindex = (re, str, start) => {
+    let result = str.slice(start).match(re);
+    if (result === null) {
+        return -1;
+    } else {
+        return start + result.index;
+    }
 }
 
 export const isblankline = function(line) {

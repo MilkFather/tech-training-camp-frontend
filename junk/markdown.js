@@ -5,7 +5,7 @@ export function markdown(src) {
     let lines = util.breaklines(src);
     lines = util.notrailingblankline(lines);
     let ast = new util.astnode('document', '');
-    for (l of [... lines]) {
+    for (let l of [... lines]) {
         // main loop
         consumeLine(l, ast);
     }
