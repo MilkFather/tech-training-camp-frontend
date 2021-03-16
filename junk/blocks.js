@@ -179,7 +179,7 @@ export const consumeLine = function(line, ast, parserstatus) {
     if (!all_close && !blank_line && parserstatus.tip.nodetype === def.BLID_PARA && parserstatus.tip.strings.length > 0) {
         // just a lazy break
         parserstatus.lastlineisblank = false;
-        parserstatus.tip.strings.push(line, linepos);
+        parserstatus.tip.strings.push(line.slice(linepos));
     } else {
         all_close = all_close || closeUnmatched(parserstatus);
         if (blank_line && container.lastChild()) {
@@ -200,7 +200,7 @@ export const consumeLine = function(line, ast, parserstatus) {
 
         switch (nodetype) {
             case def.BLID_CODE:
-                parserstatus.tip.strings.push(line, linepos);
+                parserstatus.tip.strings.push(line.slice(linepos));
                 break;
             
             case def.BLID_HEADER:
@@ -210,11 +210,11 @@ export const consumeLine = function(line, ast, parserstatus) {
             default:
                 linepos = first_nonspace_index;
                 if (acceptslines(nodetype)) {
-                    parserstatus.tip.strings.push(line, linepos);
+                    parserstatus.tip.strings.push(line.slice(linepos));
                 } else if (blank_line) break;
                 else {
                     container = makeNode(def.BLID_PARA, parserstatus);
-                    parserstatus.tip.strings.push(line, linepos);
+                    parserstatus.tip.strings.push(line.slice(linepos));
                 }
                 break;
         }

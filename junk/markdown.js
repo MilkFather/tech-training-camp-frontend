@@ -25,7 +25,7 @@ export function markdown(src) {
 
 function compileast(ast) {
     if (ast.childs.length <= 0) {
-        return ast.text;
+        return ast.text || '';
     }
     let result = '';
     for (let c of ast.childs) {
