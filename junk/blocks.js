@@ -44,7 +44,7 @@ export const consumeLine = function(line, ast, parserstatus) {
     while ((lastChild = container.lastChild()) && !lastChild.closed) {
         container = lastChild;
         // find line indent. Indented code blocks possible...
-        let nonspace_match = util.matchsinceindex(def.RE_NOSPACE, line, linepos);
+        let nonspace_match = util.matchSinceIndex(def.RE_NOSPACE, line, linepos);
         if (nonspace_match >= 0) {
             first_nonspace_index = nonspace_match; blank_line = false;
         } else {
@@ -117,7 +117,7 @@ export const consumeLine = function(line, ast, parserstatus) {
     // now, we have consumed all continuation markers, we try to create new blocks
     while (true) {
         let t = container.nodetype;
-        let nonspace_match = util.matchsinceindex(def.RE_NOSPACE, line, linepos);
+        let nonspace_match = util.matchSinceIndex(def.RE_NOSPACE, line, linepos);
         if (nonspace_match >= 0) {
             first_nonspace_index = nonspace_match; blank_line = false;
         } else {
@@ -163,7 +163,7 @@ export const consumeLine = function(line, ast, parserstatus) {
             container.fencechar = match[0][0];
             container.fenceindent = indent;
             linepos += fencelen;
-        } else if (util.matchsinceindex(RE_HRULE, line, linepos) >= 0) {
+        } else if (util.matchSinceIndex(RE_HRULE, line, linepos) >= 0) {
             // <hr>
             all_close = all_close || closeUnmatched(parserstatus);
             container = makeNode(def.BLID_HRULE, parserstatus);
