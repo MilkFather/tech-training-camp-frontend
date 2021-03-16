@@ -22,7 +22,7 @@ const closeUnmatched = function(parserstatus) {
 
 const makeNode = function(blid, parserstatus) {
     while (!cancontain(parserstatus.tip.nodetype, blid)) {
-        closeUnmatched(parserstatus);
+        close_block(parserstatus.tip, parserstatus);
     }
     let newnode = new util.astnode(blid, parserstatus.tip);
     parserstatus.tip.childs.push(newnode);
