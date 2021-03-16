@@ -41,7 +41,7 @@ export const consumeLine = function(line, ast, parserstatus) {
     let container = ast;
     let lastChild;
     let all_match = true;
-    while ((lastChild = container.last_child()) && !lastChild.closed) {
+    while ((lastChild = container.lastChild()) && !lastChild.closed) {
         container = lastChild;
         // find line indent. Indented code blocks possible...
         let nonspace_match = util.matchsinceindex(RE_NOSPACE, line, linepos);
