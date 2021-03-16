@@ -110,7 +110,7 @@ export const consumeLine = function(line, ast, parserstatus) {
             case def.BLID_CODE:   // code block
                 if (container.codeblockfenced) {
                     let closing_code_fence = line.slice(first_nonspace_index).match(def.RE_CLOSECODEFENCE);
-                    if (indent <= 3 && line[first_nonspace_index] === container.fencechar && closing_code_fence[0].length >= container.fencelen) {
+                    if (indent <= 3 && line[first_nonspace_index] === container.fencechar && closing_code_fence && closing_code_fence[0].length >= container.fencelen) {
                         // fence closed. RE_CLOSECODEFENCE matches line end. Early return.
                         all_match = false;
                         close_block(container);
