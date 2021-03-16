@@ -4,11 +4,12 @@ export const CHAR_SPACE = String.fromCodePoint(0x0020);
 export const CHAR_TABS = String.fromCodePoint(0x0009);
 
 export class astnode {
-    constructor(ntype, text) {
+    constructor(ntype, parent) {
         this.nodetype = ntype;
         this.childs = [];
-        this.text = text;
+        this.strings = [];
         this.closed = false;
+        this.parent = parent;
     }
 
     isleaf = () => {

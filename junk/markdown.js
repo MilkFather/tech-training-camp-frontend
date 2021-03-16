@@ -4,13 +4,15 @@ import { consumeLine } from './blocks.js'
 export function markdown(src) {
     let lines = util.breaklines(src);
     lines = util.notrailingblankline(lines);
-    let ast = new util.astnode('document', '');
+    let ast = new util.astnode('document', null);
+    let lastlineisblankline = false;
     for (let l of [... lines]) {
         // main loop
-        consumeLine(l, ast);
+        consumeLine(l, ast, lastlineisblankline);
+        lastlineisblankline = util.isblankline(l);
     }
-    // close any unclosed block
-    closeast(ast);
+    console.log(ast);
+    //closeast(ast);
     // parse inline marks
     parseinline(ast);
     // render the tree
