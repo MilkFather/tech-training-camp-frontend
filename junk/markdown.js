@@ -30,9 +30,9 @@ function closeast(ast) {
     ast.closed = true;
 }
 
-function compileast(c) {
-    if (c.childs.length <= 0) {
-        return c.text();
+function compileast(ast) {
+    if (ast.childs.length <= 0) {
+        return ast.text();
     }
     let result = '';
     for (let c of ast.childs) {
