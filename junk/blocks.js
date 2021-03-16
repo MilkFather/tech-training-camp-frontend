@@ -21,10 +21,10 @@ const closeUnmatched = function(parserstatus) {
 }
 
 const makeNode = function(blid, parserstatus) {
-    while (!cancontain(parserstatus.tip.nodetype, bild)) {
+    while (!cancontain(parserstatus.tip.nodetype, blid)) {
         closeUnmatched(parserstatus);
     }
-    let newnode = new util.astnode(bild, parserstatus.tip);
+    let newnode = new util.astnode(blid, parserstatus.tip);
     parserstatus.tip.childs.push(newnode);
     parserstatus.tip = newnode;
     return newnode;
