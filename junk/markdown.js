@@ -1,5 +1,6 @@
 import * as util from './util.js'
 import { consumeLine, close_block } from './blocks.js'
+import * as def from './def.js'
 
 export function markdown(src) {
     let lines = src.split(/\r\n|\n|\r/);    // split into lines
@@ -30,28 +31,29 @@ function compileast(ast) {
     let result = '';
     for (let c of ast.childs) {
         switch (c.nodetype) {
-            case 'header':
+            case def.BLID_HEADER:
                 result += `<h${c.level}>` + compileast(c) + `</h${c.level}>`;
                 break;
-            case 'paragraph':
+            case def.BLID_PARA:
                 result += `<p>` + compileast(c) + `</p>`;
                 break;
-            case 'quote':
+            case def.BLID_QUOTE:
                 result += `<quotation>` + compileast(c) + '</quotation>';
                 break;
-            case 'codeblock':
+            case def.BLID_CODE:
                 result += `<pre><code>` + compileast(c) + `</code></pre>`;
                 break;
-            case 'list':
-                if (c.ordered)
+            case def.BLID_LIST:
+                if (c.listspec.type === 'ordered')
                     result += `<ol>` + compileast(c) + '</ol>';
-                else
+                else if (c.listspec.type === 'bullet')
                     result += `<ul>` + compileast(c) + `</ul>`;
+                else console.log(`unrecognized list type: ${c.listspec.type}`);
                 break;
-            case 'item':
+            case def.BLID_LISTITEM:
                 result += `<li>` + compileast(c) + `</li>`;
                 break;
-            case 'hr':
+            case def.BLID_HRULE:
                 result += `<hr/>`;
                 break;
             default:
