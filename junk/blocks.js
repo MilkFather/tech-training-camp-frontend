@@ -131,7 +131,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
             let lastcontainerblock = findcontainerblockfor('codeblock', container);
             linepos += CODE_INDENT;
             let newnode = new util.astnode('codeblock', lastcontainerblock);
-            lastcontainerblock.childs.append(newnode);
+            lastcontainerblock.childs.push(newnode);
             container = newnode;
         }
 
@@ -145,7 +145,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
             linepos += 1; // consume the '>' symbol
             if (line[linepos] == ' ') linepos += 1; // consume an optional space after '>' too
             let newnode = new util.astnode('quote', lastcontainerblock);
-            lastcontainerblock.childs.append(newnode);
+            lastcontainerblock.childs.push(newnode);
             container = newnode;
         } else if ((match = line.slice(linepos).match(RE_HEADER))) {
             // header
@@ -153,8 +153,8 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
             linepos += match[0].length;
             let newnode = new util.astnode('header', lastcontainerblock);
             newnode.level = match[0].trim().length;
-            newnode.strings.append(ln.slice(linepos).replace(/^ *#+ *$/, '').replace(/ +#+ *$/, ''));
-            lastcontainerblock.childs.append(newnode);
+            newnode.strings.push(ln.slice(linepos).replace(/^ *#+ *$/, '').replace(/ +#+ *$/, ''));
+            lastcontainerblock.childs.push(newnode);
             container = newnode;
         } else if ((match = line.slice(linepos).match(RE_CODEFENCE))) {
             // start of fenced code block
@@ -165,7 +165,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
             newnode.fencelen = fencelen;
             newnode.fencechar = match[0][0];
             newnode.fenceindent = indent;
-            lastcontainerblock.childs.append(newnode);
+            lastcontainerblock.childs.push(newnode);
             container = newnode;
             linepos += fencelen;
         } else if (util.matchsinceindex(RE_HRULE, line, linepos) >= 0) {
@@ -173,7 +173,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
             linepos = line.length - 1;
             let lastcontainerblock = findcontainerblockfor('hr', container);
             let newnode = new util.astnode('hr', lastcontainerblock);
-            lastcontainerblock.childs.append(newnode);
+            lastcontainerblock.childs.push(newnode);
             container = newnode;
         } else {
             break;
@@ -184,15 +184,15 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
     let lastcontainerblock = findcontainerblockfor('text', container);
     if (lastcontainerblock.nodetype == 'paragraph' && !lastlineisblank) {
         // just a lazy break
-        lastcontainerblock.strings.append(line.slice(linepos));
+        lastcontainerblock.strings.push(line.slice(linepos));
     } else if (lastcontainerblock.nodetype == 'codeblock') {
-        lastcontainerblock.strings.append(line.slice(linepos));
+        lastcontainerblock.strings.push(line.slice(linepos));
     } else {
         // new paragraph block
         lastcontainerblock = findcontainerblockfor('paragraph', container);
         let newnode = new util.astnode('paragraph', lastcontainerblock);
-        newnode.strings.append(line.slice(linepos));
-        lastcontainerblock.childs.append(newnode);
+        newnode.strings.push(line.slice(linepos));
+        lastcontainerblock.childs.push(newnode);
         container = newnode;
     }
 
