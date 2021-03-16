@@ -8,14 +8,6 @@ const cancontain = function(parent_type, child_type){
              (parent_type === def.BLID_LIST && child_type === def.BLID_LISTITEM) );
 }
 
-const findcontainerblockfor = function(blocktype, ast) {
-    let result = ast;
-    while (!cancontain(result.nodetype, blocktype)) {
-        result = result.parent;
-    }
-    return result; // at least we can end up at document
-}
-
 const acceptslines = function(block_type) {
     return ( block_type === def.BLID_PARA ||
              block_type === def.BLID_CODE );
@@ -42,6 +34,8 @@ export const consumeLine = function(line, ast, parserstatus) {
     line = util.tab2space(line);
     parserstatus.oldtip = parserstatus.tip;
     let linepos = 0;
+    let first_nonspace_index;
+    let blank_line;
 
     // parse line start markers
     let container = ast;
@@ -50,8 +44,6 @@ export const consumeLine = function(line, ast, parserstatus) {
     while ((lastChild = container.last_child()) && !lastChild.closed) {
         container = lastChild;
         // find line indent. Indented code blocks possible...
-        let first_nonspace_index;
-        let blank_line;
         let nonspace_match = util.matchsinceindex(RE_NOSPACE, line, linepos);
         if (nonspace_match >= 0) {
             first_nonspace_index = nonspace_match; blank_line = false;
@@ -115,16 +107,16 @@ export const consumeLine = function(line, ast, parserstatus) {
         if (!all_match) {
             // search end early...
             container = container.parent;
-            parserstatus.lastMatched = container;
             break;
         }
     }
 
+    let all_close = (container === parserstatus.oldtip);
+    parserstatus.lastMatched = container;
+
     // now, we have consumed all continuation markers, we try to create new blocks
     while (true) {
         let t = container.nodetype;
-        let first_nonspace_index;
-        let blank_line;
         let nonspace_match = util.matchsinceindex(RE_NOSPACE, line, linepos);
         if (nonspace_match >= 0) {
             first_nonspace_index = nonspace_match; blank_line = false;
@@ -139,74 +131,93 @@ export const consumeLine = function(line, ast, parserstatus) {
             //let lastcontainerblock = findcontainerblockfor('codeblock', container);
             if (parserstatus.tip.nodetype !== def.BLID_PARA && !blank_line) {
                 linepos += CODE_INDENT;
-                closeUnmatched(parserstatus);
+                all_close = all_close || closeUnmatched(parserstatus);
                 container = makeNode(def.BLID_CODE, parserstatus);
             }
         }
 
         linepos = first_nonspace_index;
-        let mark = line[linepos];
         let match;
 
-        if (mark === '>') {
+        if (line[linepos] === '>') {
             // block quote
-            let lastcontainerblock = findcontainerblockfor('quote', container);
             linepos += 1; // consume the '>' symbol
             if (line[linepos] == ' ') linepos += 1; // consume an optional space after '>' too
-            let newnode = new util.astnode('quote', lastcontainerblock);
-            lastcontainerblock.childs.push(newnode);
-            container = newnode;
+            all_close = all_close || closeUnmatched(parserstatus);
+            container = makeNode(def.BLID_QUOTE, parserstatus);
         } else if ((match = line.slice(linepos).match(RE_HEADER))) {
             // header
-            let lastcontainerblock = findcontainerblockfor('header', container);
             linepos = line.length;
-            let newnode = new util.astnode('header', lastcontainerblock);
-            newnode.level = match[0].trim().length;
+            all_close = all_close || closeUnmatched(parserstatus);
+            container = makeNode(def.BLID_HEADER, parserstatus);
+            container.level = match[0].trim().length;
             newnode.strings.push(line.slice(linepos).replace(/^ *#+ *$/, '').replace(/ +#+ *$/, ''));
-            lastcontainerblock.childs.push(newnode);
-            container = newnode;
+            break;
         } else if ((match = line.slice(linepos).match(RE_CODEFENCE))) {
             // start of fenced code block
-            let lastcontainerblock = findcontainerblockfor('codeblock', container);
             let fencelen = match[0].length;
-            let newnode = new util.astnode('codeblock', lastcontainerblock);
-            newnode.codeblocktype = 'fence';
-            newnode.fencelen = fencelen;
-            newnode.fencechar = match[0][0];
-            newnode.fenceindent = indent;
-            lastcontainerblock.childs.push(newnode);
-            container = newnode;
+            all_close = all_close || closeUnmatched(parserstatus);
+            container = makeNode(def.BLID_CODE);
+            container.codeblockfenced = true;
+            container.fencelen = fencelen;
+            container.fencechar = match[0][0];
+            container.fenceindent = indent;
             linepos += fencelen;
         } else if (util.matchsinceindex(RE_HRULE, line, linepos) >= 0) {
             // <hr>
+            all_close = all_close || closeUnmatched(parserstatus);
+            container = makeNode(def.BLID_HRULE, parserstatus);
             linepos = line.length - 1;
-            let lastcontainerblock = findcontainerblockfor('hr', container);
-            let newnode = new util.astnode('hr', lastcontainerblock);
-            lastcontainerblock.childs.push(newnode);
-            container = newnode;
+            break;
         } else {
             break;
         }
     }
 
-    if (!line[linepos]) return ast;
-
     // now we have consumed all markers, what remains are text.
-    let lastcontainerblock = findcontainerblockfor('text', container);
-    if (lastcontainerblock.nodetype == 'paragraph' && !lastlineisblank) {
+    if (!all_close && !blank_line && parserstatus.tip.nodetype === def.BLID_PARA && parserstatus.tip.strings.length > 0) {
         // just a lazy break
-        lastcontainerblock.strings.push(line.slice(linepos));
-    } else if (lastcontainerblock.nodetype == 'codeblock') {
-        lastcontainerblock.strings.push(line.slice(linepos));
+        parserstatus.lastlineisblank = false;
+        parserstatus.tip.strings.push(line, linepos);
     } else {
-        // new paragraph block
-        lastcontainerblock = findcontainerblockfor('paragraph', container);
-        let newnode = new util.astnode('paragraph', lastcontainerblock);
-        newnode.strings.push(line.slice(linepos));
-        lastcontainerblock.childs.push(newnode);
-        container = newnode;
-    }
+        all_close = all_close || closeUnmatched(parserstatus);
+        if (blank_line && container.lastChild()) {
+            container.lastChild().lastlineisblank = true;
+        }
+        let nodetype = container.nodetype;
+        if (blank_line && !(nodetype === def.BLID_QUOTE || nodetype === def.BLID_HEADER || (nodetype === def.BLID_CODE && container.codeblockfenced))) {
+            container.lastlineisblank = true;
+        } else {
+            container.lastlineisblank = false;
+        }
 
+        let walk = container;
+        while (walk.parent) {
+            walk.parent.lastlineisblank = false;
+            walk = walk.parent;
+        }
+
+        switch (nodetype) {
+            case def.BLID_CODE:
+                parserstatus.tip.strings.push(line, linepos);
+                break;
+            
+            case def.BLID_HEADER:
+            case def.BLID_HRULE:
+                break;
+
+            default:
+                linepos = first_nonspace_index;
+                if (acceptslines(nodetype)) {
+                    parserstatus.tip.strings.push(line, linepos);
+                } else if (blank_line) break;
+                else {
+                    container = makeNode(def.BLID_PARA, parserstatus);
+                    parserstatus.tip.strings.push(line, linepos);
+                }
+                break;
+        }
+    }
     return ast;
 }
 
