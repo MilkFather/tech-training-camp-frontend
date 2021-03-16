@@ -2,20 +2,21 @@ import * as util from './util.js'
 import { consumeLine } from './blocks.js'
 
 export function markdown(src) {
-    let lines = util.breaklines(src);
+    let lines = src.split(/\r\n|\n|\r/);    // split into lines
     lines = util.notrailingblankline(lines);
     let ast = new util.astnode('document', null);
-    let lastlineisblankline = false;
+    
+    let status = {
+        tip: ast,
+        oldtop: null,
+        root: ast,
+        
+    };
     for (let l of [... lines]) {
         // main loop
-        consumeLine(l, ast, lastlineisblankline);
-        lastlineisblankline = util.isblankline(l);
+        consumeLine(l, ast, status);
     }
     console.log(ast);
-    //closeast(ast);
-    // parse inline marks
-    //parseinline(ast);
-    // render the tree
     let htm = compileast(ast);
     return htm;
 }

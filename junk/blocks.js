@@ -1,22 +1,11 @@
 import * as util from './util.js'
-
-const CODE_INDENT = 4;
-
-const RE_HRULE = /^(?:(?:\* *){3,}|(?:_ *){3,}|(?:- *){3,}) *$/;
-const RE_HEADER = /^#{1,6}(?: +|$)/;
-const RE_NOSPACE = /[^ \t\n]/;
-const RE_CODEFENCE = /^`{3,}(?!.*`)|^~{3,}(?!.*~)/;
-const RE_CLOSECODEFENCE = /^(?:`{3,}|~{3,})(?= *$)/;
+import * as def from './def.js'
 
 const cancontain = function(parent_type, child_type){
-    if (child_type === 'header' || child_type === 'hr') {
-        return (parent_type === 'document');
-    } else 
-    return ( parent_type === 'document' ||
-             parent_type === 'quote' ||
-             parent_type === 'item' ||
-             (parent_type === 'list' && child_type === 'item') ||
-             (parent_type === 'paragraph' && child_type === 'text') );
+    return ( parent_type === def.BLID_DOC ||
+             parent_type === def.BLID_QUOTE ||
+             parent_type === def.BLID_LISTITEM ||
+             (parent_type === def.BLID_LIST && child_type === def.BLID_LISTITEM) );
 }
 
 const findcontainerblockfor = function(blocktype, ast) {
@@ -28,12 +17,30 @@ const findcontainerblockfor = function(blocktype, ast) {
 }
 
 const acceptslines = function(block_type) {
-    return ( block_type === 'paragraph' ||
-             block_type === 'codeblock' );
+    return ( block_type === def.BLID_PARA ||
+             block_type === def.BLID_CODE );
 };
 
-export const consumeLine = function(line, ast, lastlineisblank=false) {
+const closeUnmatched = function(parserstatus) {
+    while (parserstatus.oldtip !== parserstatus.lastMatched) {
+        close_block(parserstatus.oldtip);
+        parserstatus.oldtip = parserstatus.oldtip.parent;
+    }
+}
+
+const makeNode = function(blid, parserstatus) {
+    while (!cancontain(parserstatus.tip.nodetype, bild)) {
+        closeUnmatched(parserstatus);
+    }
+    let newnode = new util.astnode(bild, parserstatus.tip);
+    parserstatus.tip.childs.push(newnode);
+    parserstatus.tip = newnode;
+    return newnode;
+}
+
+export const consumeLine = function(line, ast, parserstatus) {
     line = util.tab2space(line);
+    parserstatus.oldtip = parserstatus.tip;
     let linepos = 0;
 
     // parse line start markers
@@ -55,7 +62,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
 
         // try to consume block markers if we want to continue this block...
         switch (container.nodetype) {
-            case 'quote':   // quote block
+            case def.BLID_QUOTE:   // quote block
                 if (indent <= 3 && line[first_nonspace_index] === '>') {    // criteria to continue a quote block: no more than 3 spaces before a '>'
                     linepos = first_nonspace_index + 1; // consume the indent and '>' symbol
                     if (line[linepos] == ' ') linepos += 1; // consume an optional space after '>' too
@@ -64,14 +71,14 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
                 }
                 break;
 
-            case 'header':  // h1-h6
-            case 'hr':      // <hr>
+            case def.BLID_HEADER:  // h1-h6
+            case def.BLID_HRULE:      // <hr>
                 all_match = false;  // criteria never met
                 break;
 
-            case 'codeblock':   // code block
-                if (container.codeblocktype === 'fence') {
-                    let closing_code_fence = line.slice(first_nonspace_index).match(RE_CLOSECODEFENCE);
+            case def.BLID_CODE:   // code block
+                if (container.codeblockfenced) {
+                    let closing_code_fence = line.slice(first_nonspace_index).match(def.RE_CLOSECODEFENCE);
                     if (indent <= 3 && line[first_nonspace_index] === container.fencechar && closing_code_fence[0].length >= container.fencelen) {
                         // fence closed. RE_CLOSECODEFENCE matches line end. Early return.
                         all_match = false;
@@ -87,8 +94,8 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
                         }
                     }
                 } else {
-                    if (indent >= CODE_INDENT) {
-                        linepos += CODE_INDENT;
+                    if (indent >= def.CODE_INDENT) {
+                        linepos += def.CODE_INDENT;
                     } else if (blank_line) {
                         linepos = first_nonspace_index; // end of line whatsoever
                     } else {
@@ -108,6 +115,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
         if (!all_match) {
             // search end early...
             container = container.parent;
+            parserstatus.lastMatched = container;
             break;
         }
     }
@@ -125,14 +133,15 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
         }
         let indent = first_nonspace_index - linepos;
 
-        if (t == 'codeblock') break; // no we don't try to parse codeblocks
+        if (t === def.BLID_CODE) break; // no we don't try to parse codeblocks
 
-        if (indent > CODE_INDENT) { // another indented code...
-            let lastcontainerblock = findcontainerblockfor('codeblock', container);
-            linepos += CODE_INDENT;
-            let newnode = new util.astnode('codeblock', lastcontainerblock);
-            lastcontainerblock.childs.push(newnode);
-            container = newnode;
+        if (indent > def.CODE_INDENT) { // another indented code...
+            //let lastcontainerblock = findcontainerblockfor('codeblock', container);
+            if (parserstatus.tip.nodetype !== def.BLID_PARA && !blank_line) {
+                linepos += CODE_INDENT;
+                closeUnmatched(parserstatus);
+                container = makeNode(def.BLID_CODE, parserstatus);
+            }
         }
 
         linepos = first_nonspace_index;
@@ -199,4 +208,36 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
     }
 
     return ast;
+}
+
+const close_block = function(block, parserstatus) {
+    if (block.closed) {
+        return;
+    }
+    block.closed = true;
+
+    switch (block.blocktype) {
+        case def.BLID_PARA:
+        case def.BLID_HEADER:
+            block.text = block.strings.join('\n');
+            break;
+
+        case def.BLID_CODE:
+            if (block.codeblockfenced) {
+                block.codeblockinfo = block.strings[0].trim();
+                block.text = block.strings.slice(1).join('\n');
+                if (block.strings.length > 1) block.text += '\n';
+            } else {
+                util.stripFinalBlanklines(block.strings);
+                block.text = block.strings.join('\n') + '\n';
+            }
+            break;
+
+        case def.BLID_LIST:
+            break;
+
+        default:
+            break;
+    }
+    parserstatus.tip = block.parent || parserstatus.root;
 }
