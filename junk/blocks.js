@@ -158,7 +158,7 @@ export const consumeLine = function(line, ast, parserstatus) {
             // start of fenced code block
             let fencelen = match[0].length;
             all_close = all_close || closeUnmatched(parserstatus);
-            container = makeNode(def.BLID_CODE);
+            container = makeNode(def.BLID_CODE, parserstatus);
             container.codeblockfenced = true;
             container.fencelen = fencelen;
             container.fencechar = match[0][0];
