@@ -250,5 +250,5 @@ export const close_block = function(block, parserstatus) {
         default:
             break;
     }
-    parserstatus.tip = block.parent || parserstatus.root;
+    parserstatus.tip = block.parent;// || parserstatus.root;
 }

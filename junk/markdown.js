@@ -8,7 +8,7 @@ export function markdown(src) {
     
     let status = {
         tip: ast,
-        oldtop: null,
+        oldtip: null,
         root: ast,
     };
     for (let l of [... lines]) {
