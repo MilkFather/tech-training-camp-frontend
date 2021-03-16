@@ -115,6 +115,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
     // now, we have consumed all continuation markers, we try to create new blocks
     while (true) {
         let t = container.nodetype;
+        let first_nonspace_index;
         let nonspace_match = util.matchsinceindex(RE_NOSPACE, line, linepos);
         if (nonspace_match >= 0) {
             first_nonspace_index = nonspace_match; blank_line = false;
