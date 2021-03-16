@@ -30,7 +30,7 @@ function closeast(ast) {
     ast.closed = true;
 }
 
-function compileast(ast) {
+function compileast(c) {
     if (c.childs.length <= 0) {
         return c.text();
     }
