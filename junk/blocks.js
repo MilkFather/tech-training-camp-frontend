@@ -153,7 +153,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
             linepos += match[0].length;
             let newnode = new util.astnode('header', lastcontainerblock);
             newnode.level = match[0].trim().length;
-            newnode.strings.push(ln.slice(linepos).replace(/^ *#+ *$/, '').replace(/ +#+ *$/, ''));
+            newnode.strings.push(line.slice(linepos).replace(/^ *#+ *$/, '').replace(/ +#+ *$/, ''));
             lastcontainerblock.childs.push(newnode);
             container = newnode;
         } else if ((match = line.slice(linepos).match(RE_CODEFENCE))) {
