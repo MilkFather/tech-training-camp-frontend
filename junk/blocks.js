@@ -150,7 +150,7 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
         } else if ((match = line.slice(linepos).match(RE_HEADER))) {
             // header
             let lastcontainerblock = findcontainerblockfor('header', container);
-            linepos += match[0].length;
+            linepos = line.length;
             let newnode = new util.astnode('header', lastcontainerblock);
             newnode.level = match[0].trim().length;
             newnode.strings.push(line.slice(linepos).replace(/^ *#+ *$/, '').replace(/ +#+ *$/, ''));
@@ -179,6 +179,8 @@ export const consumeLine = function(line, ast, lastlineisblank=false) {
             break;
         }
     }
+
+    if (!line[linepos]) return ast;
 
     // now we have consumed all markers, what remains are text.
     let lastcontainerblock = findcontainerblockfor('text', container);
