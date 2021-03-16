@@ -15,7 +15,7 @@ const acceptslines = function(block_type) {
 
 const closeUnmatched = function(parserstatus) {
     while (parserstatus.oldtip !== parserstatus.lastMatched) {
-        close_block(parserstatus.oldtip);
+        close_block(parserstatus.oldtip, parserstatus);
         parserstatus.oldtip = parserstatus.oldtip.parent;
     }
 }
