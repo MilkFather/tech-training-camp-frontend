@@ -1,5 +1,5 @@
 import * as util from './util.js'
-import { consumeLine } from './blocks.js'
+import { consumeLine, close_block } from './blocks.js'
 
 export function markdown(src) {
     let lines = src.split(/\r\n|\n|\r/);    // split into lines
@@ -16,13 +16,16 @@ export function markdown(src) {
         consumeLine(l, ast, status);
         console.log(ast);
     }
+    while (status.tip) {
+        close_block(status.tip, status);
+    }
     let htm = compileast(ast);
     return htm;
 }
 
 function compileast(ast) {
     if (ast.childs.length <= 0) {
-        return ast.text();
+        return ast.text;
     }
     let result = '';
     for (let c of ast.childs) {
