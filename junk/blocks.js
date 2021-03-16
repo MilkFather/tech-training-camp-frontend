@@ -147,7 +147,7 @@ export const consumeLine = function(line, ast, parserstatus) {
             container = makeNode(def.BLID_QUOTE, parserstatus);
         } else if ((match = line.slice(linepos).match(def.RE_HEADER))) {
             // header
-            linepos = line.length;
+            linepos += match[0].length;
             all_close = all_close || closeUnmatched(parserstatus);
             container = makeNode(def.BLID_HEADER, parserstatus);
             container.level = match[0].trim().length;
