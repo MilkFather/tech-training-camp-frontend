@@ -14,7 +14,7 @@ export function markdown(src) {
     console.log(ast);
     //closeast(ast);
     // parse inline marks
-    parseinline(ast);
+    //parseinline(ast);
     // render the tree
     let htm = compileast(ast);
     return htm;
@@ -30,10 +30,41 @@ function closeast(ast) {
     ast.closed = true;
 }
 
-function parseinline(ast) {
-    // dummy
-}
-
 function compileast(ast) {
-
+    if (c.childs.length <= 0) {
+        return c.text();
+    }
+    let result = '';
+    for (let c of ast.childs) {
+        switch (c.nodetype) {
+            case 'header':
+                result += `<h${c.level}>` + compileast(c) + `</h${c.level}>`;
+                break;
+            case 'paragraph':
+                result += `<p>` + compileast(c) + `</p>`;
+                break;
+            case 'quote':
+                result += `<quotation>` + compileast(c) + '</quotation>';
+                break;
+            case 'codeblock':
+                result += `<pre><code>` + compileast(c) + `</code></pre>`;
+                break;
+            case 'list':
+                if (c.ordered)
+                    result += `<ol>` + compileast(c) + '</ol>';
+                else
+                    result += `<ul>` + compileast(c) + `</ul>`;
+                break;
+            case 'item':
+                result += `<li>` + compileast(c) + `</li>`;
+                break;
+            case 'hr':
+                result += `<hr/>`;
+                break;
+            default:
+                console.log(`unrecongized: ${c.nodetype}`);
+                break;
+        }
+    }
+    return result;
 }

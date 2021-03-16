@@ -20,6 +20,10 @@ export class astnode {
         if (this.childs.length <= 0) return null;
         return this.childs[this.childs.length - 1];
     }
+
+    text = () => {
+        return this.strings.join('\n');
+    }
 }
 
 export const breaklines = function(text) {
