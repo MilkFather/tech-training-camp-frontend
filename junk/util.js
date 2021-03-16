@@ -7,6 +7,8 @@ export class astnode {
         this.strings = [];
         this.closed = false;
         this.parent = parent;
+
+        this.text = null;
     }
 
     isLeaf = () => {
