@@ -130,7 +130,7 @@ export const consumeLine = function(line, ast, parserstatus) {
         if (indent > def.CODE_INDENT) { // another indented code...
             //let lastcontainerblock = findcontainerblockfor('codeblock', container);
             if (parserstatus.tip.nodetype !== def.BLID_PARA && !blank_line) {
-                linepos += CODE_INDENT;
+                linepos += def.CODE_INDENT;
                 all_close = all_close || closeUnmatched(parserstatus);
                 container = makeNode(def.BLID_CODE, parserstatus);
             }
@@ -145,7 +145,7 @@ export const consumeLine = function(line, ast, parserstatus) {
             if (line[linepos] == ' ') linepos += 1; // consume an optional space after '>' too
             all_close = all_close || closeUnmatched(parserstatus);
             container = makeNode(def.BLID_QUOTE, parserstatus);
-        } else if ((match = line.slice(linepos).match(RE_HEADER))) {
+        } else if ((match = line.slice(linepos).match(def.RE_HEADER))) {
             // header
             linepos = line.length;
             all_close = all_close || closeUnmatched(parserstatus);
@@ -153,7 +153,7 @@ export const consumeLine = function(line, ast, parserstatus) {
             container.level = match[0].trim().length;
             newnode.strings.push(line.slice(linepos).replace(/^ *#+ *$/, '').replace(/ +#+ *$/, ''));
             break;
-        } else if ((match = line.slice(linepos).match(RE_CODEFENCE))) {
+        } else if ((match = line.slice(linepos).match(def.RE_CODEFENCE))) {
             // start of fenced code block
             let fencelen = match[0].length;
             all_close = all_close || closeUnmatched(parserstatus);
@@ -163,7 +163,7 @@ export const consumeLine = function(line, ast, parserstatus) {
             container.fencechar = match[0][0];
             container.fenceindent = indent;
             linepos += fencelen;
-        } else if (util.matchSinceIndex(RE_HRULE, line, linepos) >= 0) {
+        } else if (util.matchSinceIndex(def.RE_HRULE, line, linepos) >= 0) {
             // <hr>
             all_close = all_close || closeUnmatched(parserstatus);
             container = makeNode(def.BLID_HRULE, parserstatus);
