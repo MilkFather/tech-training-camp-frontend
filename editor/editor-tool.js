@@ -29,7 +29,8 @@ export class MarkdownEditToolbarItemSave extends MarkdownEditToolbarItem {
         super(editor, '保存当前文件', true);
         this.el.addEventListener('click', this.saveFile);
         this.text.innerText = '保存';
-        this.icon.style.backgroundImage = 'linear-gradient(transparent,transparent),url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22%3E%3Ctitle%3Ebookmark%3C/title%3E%3Cpath d=%22M5 1a2 2 0 00-2 2v16l7-5 7 5V3a2 2 0 00-2-2z%22/%3E%3C/svg%3E")'
+        this.icon.style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 enable-background=%22new 0 0 24 24%22 viewBox=%220 0 24 24%22 fill=%22black%22 width=%2218px%22 height=%2218px%22%3E%3Cg%3E%3Crect fill=%22none%22 height=%2224%22 width=%2224%22/%3E%3C/g%3E%3Cg%3E%3Cpath d=%22M5,20h14v-2H5V20z M19,9h-4V3H9v6H5l7,7L19,9z%22/%3E%3C/g%3E%3C/svg%3E")';
+        //'linear-gradient(transparent,transparent),url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22%3E%3Ctitle%3Ebookmark%3C/title%3E%3Cpath d=%22M5 1a2 2 0 00-2 2v16l7-5 7 5V3a2 2 0 00-2-2z%22/%3E%3C/svg%3E")'
     }
 
     saveFile = () => {
