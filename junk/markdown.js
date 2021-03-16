@@ -14,7 +14,7 @@ export function markdown(src) {
     for (let l of [... lines]) {
         // main loop
         consumeLine(l, ast, status);
-        console.log(ast);
+        //console.log(ast);
     }
     while (status.tip) {
         close_block(status.tip, status);

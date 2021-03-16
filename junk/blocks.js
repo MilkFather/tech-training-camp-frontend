@@ -151,6 +151,7 @@ export const consumeLine = function(line, ast, parserstatus) {
             all_close = all_close || closeUnmatched(parserstatus);
             container = makeNode(def.BLID_HEADER, parserstatus);
             container.level = match[0].trim().length;
+            console.log(line.slice(linepos));
             container.strings.push(line.slice(linepos).replace(/^ *#+ *$/, '').replace(/ +#+ *$/, ''));
             break;
         } else if ((match = line.slice(linepos).match(def.RE_CODEFENCE))) {
