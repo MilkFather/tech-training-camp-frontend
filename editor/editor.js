@@ -1,13 +1,4 @@
-import {
-    MarkdownEditToolbarItemSave, 
-    MarkdownEditToolbarItemBold, 
-    MarkdownEditToolbarItemItalic, 
-    MarkdownEditToolbarItemUList,
-    MarkdownEditToolbarItemOList,
-    MarkdownEditToolbarItemQuote,
-    MarkdownEditToolbarItemLink,
-    MarkdownEditToolbarItemImage
-} from './editor-tool.js';
+import * as ext from './editor-tool.js';
 
 export class MarkdownEditor {
     el = null;
@@ -16,14 +7,20 @@ export class MarkdownEditor {
     preview = null;
 
     extensions = [
-        MarkdownEditToolbarItemSave,
-        MarkdownEditToolbarItemBold,
-        MarkdownEditToolbarItemItalic,
-        MarkdownEditToolbarItemUList,
-        MarkdownEditToolbarItemOList,
-        MarkdownEditToolbarItemQuote,
-        MarkdownEditToolbarItemLink,
-        MarkdownEditToolbarItemImage
+        ext.MarkdownEditToolbarItemSave,
+        ext.MarkdownEditToolbarItemH1,
+        ext.MarkdownEditToolbarItemH2,
+        ext.MarkdownEditToolbarItemH3,
+        ext.MarkdownEditToolbarItemH4,
+        ext.MarkdownEditToolbarItemH5,
+        ext.MarkdownEditToolbarItemH6,
+        ext.MarkdownEditToolbarItemBold,
+        ext.MarkdownEditToolbarItemItalic,
+        ext.MarkdownEditToolbarItemUList,
+        ext.MarkdownEditToolbarItemOList,
+        ext.MarkdownEditToolbarItemQuote,
+        ext.MarkdownEditToolbarItemLink,
+        ext.MarkdownEditToolbarItemImage
     ]
 
     constructor(id, parserfunc) {
