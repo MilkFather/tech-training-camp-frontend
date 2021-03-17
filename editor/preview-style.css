@@ -10,20 +10,20 @@
     padding: .2em .4em;
     margin: 0;
     font-size: 85%;
-    background-color: rgb(224, 224, 224);
+    background-color: rgb(245, 245, 245);
     border-radius: 6px;
     font-family: monospace;
 }
 
 .editor-preview pre {
-    background-color: rgb(224, 224, 224);
+    background-color: rgb(245, 245, 245);
     border-radius: 6px;
-    padding: .8em, 1em;
+    padding: .8em 1em;
     margin: 0;
 }
 
 .editor-preview blockquote {
-    background-color: darkgray;
+    background-color: rgb(245, 245, 245);
     border-left: 5px solid gray;
 }
 
