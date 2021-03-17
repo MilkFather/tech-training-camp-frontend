@@ -7,8 +7,11 @@
 }
 
 .editor-preview code {
-    background-color: darkgray;
-    border-radius: 10px;
+    padding: .2em .4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
     font-family: monospace;
 }
 
