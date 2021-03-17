@@ -71,7 +71,7 @@ import * as ext from 'path/to/editor-tool.js'
 #### 插入编辑元素
 请为编辑区域分配一个容器元素，然后在Javascript中加入如下代码
 ```javascript
-editor = new MarkdownEditor('editor-0', parse_function, extensions);
+editor = new MarkdownEditor('id', parse_function, extensions);
 containerElement.appendChild(editor.el);
 ```
 
