@@ -2,7 +2,7 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   entry: path.join(__dirname, 'src', 'index'),
-  watch: false,
+  watch: true,
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/dist/',

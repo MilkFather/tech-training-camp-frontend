@@ -32,7 +32,7 @@ export class MarkdownEditToolbarItemSave extends MarkdownEditToolbarItem {
         this.icon.style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 enable-background=%22new 0 0 24 24%22 viewBox=%220 0 24 24%22 fill=%22black%22 width=%2218px%22 height=%2218px%22%3E%3Cg%3E%3Crect fill=%22none%22 height=%2224%22 width=%2224%22/%3E%3C/g%3E%3Cg%3E%3Cpath d=%22M5,20h14v-2H5V20z M19,9h-4V3H9v6H5l7,7L19,9z%22/%3E%3C/g%3E%3C/svg%3E")';
     }
 
-    saveFile() {
+    saveFile = () => {
         let element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.editor.getText()));
         element.setAttribute('download', 'Markdown file.md');
