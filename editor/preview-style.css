@@ -3,7 +3,8 @@
 }
 
 .editor-preview h1 {
-    padding: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
     border-bottom: 2px solid gray;
 }
 
