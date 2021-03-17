@@ -9,11 +9,11 @@ export class astnode {
         this.parent = parent;
     }
 
-    isLeaf = () => {
+    isLeaf() {
         return this.childs.length <= 0;
     }
 
-    lastChild = () => {
+    lastChild() {
         if (this.childs.length <= 0) return null;
         return this.childs[this.childs.length - 1];
     }

@@ -145,7 +145,7 @@ export const consumeLine = function(line, ast, parserstatus) {
                 if (blank_line) {
                     linepos = first_nonspace_index;
                 } else if (indent >= container.listspec.marketOffset + container.listspec.padding) {
-                    offset += container.listspec.marketOffset + container.listspec.padding;
+                    linepos += container.listspec.marketOffset + container.listspec.padding;
                 } else {
                     all_match = false;
                 }

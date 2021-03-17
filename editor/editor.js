@@ -1,41 +1,19 @@
-import * as ext from './editor-tool.js';
-
 export class MarkdownEditor {
-    el = null;
-    editbox = null;
-    toolbar = null;
-    preview = null;
-
-    extensions = [
-        ext.MarkdownEditToolbarItemSave,
-        ext.MarkdownEditToolbarItemH1,
-        ext.MarkdownEditToolbarItemH2,
-        ext.MarkdownEditToolbarItemH3,
-        ext.MarkdownEditToolbarItemH4,
-        ext.MarkdownEditToolbarItemH5,
-        ext.MarkdownEditToolbarItemH6,
-        ext.MarkdownEditToolbarItemBold,
-        ext.MarkdownEditToolbarItemItalic,
-        ext.MarkdownEditToolbarItemUList,
-        ext.MarkdownEditToolbarItemOList,
-        ext.MarkdownEditToolbarItemQuote,
-        ext.MarkdownEditToolbarItemCode,
-        ext.MarkdownEditToolbarItemLink,
-        ext.MarkdownEditToolbarItemImage
-    ]
-
-    constructor(id, parserfunc) {
+    constructor(id, parserfunc, ext) {
+        this.editbox = null;
+        this.toolbar = null;
+        this.preview = null;
         this.el = document.createElement('div');
         this.el.id = id;
         this.el.className = 'editor';
         this.parserfunc = parserfunc;
-        this.setChild();
+        this.setChild(ext);
     }
 
-    setChild() {
+    setChild(ext) {
         this.preview = new MarkdownPreview();
         this.editbox = new MarkdownEditBox(this.preview);
-        this.toolbar = new MarkdownEditToolbar(this.editbox, this.extensions);
+        this.toolbar = new MarkdownEditToolbar(this.editbox, ext);
 
         this.el.appendChild(this.toolbar.el);
         this.el.appendChild(this.editbox.el);
@@ -47,7 +25,6 @@ export class MarkdownEditor {
 }
 
 class MarkdownPreview {
-    el = null;
     constructor() {
         this.el = document.createElement('div');
         this.el.className = 'editor-preview';
@@ -60,10 +37,8 @@ class MarkdownPreview {
 }
 
 class MarkdownEditToolbar {
-    el = null;
-    editbox = null;
-    items = [];
     constructor(editbox=null, extension=[]) {
+        this.items = [];
         this.el = document.createElement('div');
         this.editbox = editbox;
         this.el.className = 'editor-edit-toolbar';
@@ -77,8 +52,6 @@ class MarkdownEditToolbar {
 }
 
 class MarkdownEditBox {
-    el = null;
-    preview = null;
     constructor(preview=null) {
         this.el = document.createElement('textarea');
         this.preview = preview;
@@ -91,11 +64,11 @@ class MarkdownEditBox {
         });
     }
 
-    getText = () => {
+    getText() {
         return this.el.value;
     }
 
-    insertText = (text) => {
+    insertText(text) {
         let selS = this.el.selectionEnd;
         let tmpstring = this.el.value;
         let tmpstringleft = tmpstring.slice(0, selS);
