@@ -2,10 +2,14 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.editor-preview h1 {
+.editor-preview h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+
+.editor-preview h1, h2 {
     padding-top: 1em;
     padding-bottom: 1em;
-    border-bottom: 2px solid gray;
+    border-bottom: 1px solid rgb(245, 245, 245);
 }
 
 .editor-preview code {
