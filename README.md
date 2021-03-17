@@ -1,6 +1,6 @@
 # tech-training-camp-frontend
 
-本项目同时在GitHub Pages中托管。[访问此处](https://milkfather.github.io/tech-training-camp-frontend/dist/index.html)实际体验。
+本项目同时在GitHub Pages中托管。[访问此处](https://milkfather.github.io/tech-training-camp-frontend/)实际体验。
 
 请务必阅读[开放源代码许可证](./LICENSE.md).
 

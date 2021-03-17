@@ -47,7 +47,6 @@ function compileast(ast) {
                     result += `<ol>` + compileast(c) + '</ol>';
                 else if (c.listspec.type === 'bullet')
                     result += `<ul>` + compileast(c) + `</ul>`;
-                else console.log(`unrecognized list type: ${c.listspec.type}`);
                 break;
             case def.BLID_LISTITEM:
                 result += `<li>` + compileast(c) + `</li>`;
@@ -56,7 +55,6 @@ function compileast(ast) {
                 result += `<hr/>`;
                 break;
             default:
-                console.log(`unrecongized: ${c.nodetype}`);
                 break;
         }
     }
