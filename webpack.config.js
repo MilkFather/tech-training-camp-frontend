@@ -1,6 +1,6 @@
 const path = require('path');
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: path.join(__dirname, 'src', 'index'),
   watch: false,
   output: {
@@ -26,18 +26,23 @@ module.exports = {
               "browsers": "last 2 chrome versions"
             }
           }]
+        ],
+        plugins: [
+          [
+            "@babel/plugin-proposal-class-properties"
+          ]
         ]
       }
     }]
   },
   resolve: {
     extensions: ['.json', '.js', '.jsx']
-  }/*,
+  },
   devtool: 'source-map',
   devServer: {
     contentBase: path.join(__dirname, '/dist/'),
     inline: true,
     host: 'localhost',
     port: 8080,
-  }*/
+  }
 };
