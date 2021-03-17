@@ -72,7 +72,7 @@ import * as ext from 'path/to/editor-tool.js'
 请为编辑区域分配一个容器元素，然后在Javascript中加入如下代码
 ```javascript
 editor = new MarkdownEditor('editor-0', parse_function, extensions);
-document.getElementById('container').appendChild(editor.el);
+containerElement.appendChild(editor.el);
 ```
 
 `MarkdownEditor`接受三个参数。第一个是您为该编辑模块指定的ID。第二个是该编辑模块使用的解析引擎。第三个是您需要加载的工具栏插件。
