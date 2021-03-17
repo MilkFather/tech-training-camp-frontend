@@ -19,3 +19,9 @@ export const RE_CODEFENCE = /^`{3,}(?!.*`)|^~{3,}(?!.*~)/;
 export const RE_CLOSECODEFENCE = /^(?:`{3,}|~{3,})(?= *$)/;
 export const RE_ULMARKER = /^[*+-]( +|$)/;
 export const RE_OLMARKER = /^(\d+)([.)])( +|$)/;
+
+/* Inline Regex */
+export const RE_EMPH = /(**|__)(.*?)(**|__)\1/;
+export const RE_STRONG = /[*_](.*?)[*_]\1/;
+export const RE_IMAGE = /!\[(.*?)\]\(.*?\)/;
+export const RE_LINK = /\[(.*?)\]\(.*?)\)/;

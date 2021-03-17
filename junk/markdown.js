@@ -1,10 +1,10 @@
 import * as util from './util.js'
 import { consumeLine, close_block } from './blocks.js'
+import { processinline } from './inlines.js'
 import * as def from './def.js'
 
 export function markdown(src) {
     let lines = src.split(/\r\n|\n|\r/);    // split into lines
-    //lines = util.notrailingblankline(lines);
     let ast = new util.astnode('document', null);
     
     let status = {
@@ -13,13 +13,12 @@ export function markdown(src) {
         root: ast,
     };
     for (let l of [... lines]) {
-        // main loop
         consumeLine(l, ast, status);
-        //console.log(ast);
     }
     while (status.tip) {
         close_block(status.tip, status);
     }
+    processinline(ast);
     let htm = compileast(ast);
     return htm;
 }
