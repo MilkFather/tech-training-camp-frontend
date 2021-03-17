@@ -28,10 +28,14 @@
     margin: 0;
 }
 
+.editor-preview pre code {
+    padding: unset;
+}
+
 .editor-preview blockquote {
     background-color: rgb(245, 245, 245);
     border-left: 3px solid gray;
-    padding: .3em 1em
+    padding: .1em 1em
 }
 
 .editor-preview a {
