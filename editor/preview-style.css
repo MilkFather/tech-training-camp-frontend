@@ -1,0 +1,18 @@
+.editor-preview {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.editor-preview h1 {
+    border-bottom: 2px solid gray;
+}
+
+.editor-preview code {
+    background-color: darkgray;
+    border-radius: 10px;
+    font-family: monospace;
+}
+
+.editor-preview blockquote {
+    background-color: darkgray;
+    border-left: 5px solid gray;
+}

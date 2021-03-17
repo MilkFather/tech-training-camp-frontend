@@ -37,7 +37,7 @@ function compileast(ast) {
                 result += `<p>` + compileast(c) + `</p>`;
                 break;
             case def.BLID_QUOTE:
-                result += `<quotation>` + compileast(c) + '</quotation>';
+                result += `<blockquote>` + compileast(c) + '</blockquote>';
                 break;
             case def.BLID_CODE:
                 result += `<pre><code>` + compileast(c) + `</code></pre>`;
