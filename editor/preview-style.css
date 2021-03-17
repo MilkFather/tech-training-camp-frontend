@@ -24,14 +24,14 @@
 .editor-preview pre {
     background-color: rgb(245, 245, 245);
     border-radius: 6px;
-    padding: .3em 1em;
+    padding: .8em 1em;
     margin: 0;
 }
 
 .editor-preview blockquote {
     background-color: rgb(245, 245, 245);
     border-left: 3px solid gray;
-    padding: .8em 1em
+    padding: .3em 1em
 }
 
 .editor-preview a {
