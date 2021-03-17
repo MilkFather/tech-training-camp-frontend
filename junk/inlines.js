@@ -3,7 +3,7 @@ import * as def from './def.js'
 export let processinline = function(ast) {
     let i;
     if (ast.childs.length <= 0) {
-        let t = ast.text;
+        let t = ast.text || '';
         let match;
         // step 1: match image
         while ((match = t.match(def.RE_IMAGE))) {
