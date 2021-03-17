@@ -6,9 +6,17 @@ export let processinline = function(ast) {
         let t = ast.text;
         let match;
         // step 1: match image
-        t = t.replace(def.RE_IMAGE, '<img src="$2" alt="$1" />');
+        while ((match = t.match(def.RE_IMAGE))) {
+            let alt = match[1] || '';
+            let url = match[2] || '';
+            t = t.replace(match[0], `<img src="${url}" alt="${alt}" />`);
+        }
         // step 2: match link
-        t = t.replace(def.RE_LINK, '<a href="$2">$1</a>');
+        while ((match = t.match(def.RE_LINK))) {
+            let txt = match[1] || '';
+            let url = match[2] || '';
+            t = t.replace(match[0], `<a href="${url}">${txt}</a>`);
+        }
         // step 3: match strong emphasis
         while ((match = t.match(def.RE_STRONG))) {
             let word = match[2] || match[5] || '';
