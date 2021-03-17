@@ -19,6 +19,7 @@ export class MarkdownEditor {
         ext.MarkdownEditToolbarItemUList,
         ext.MarkdownEditToolbarItemOList,
         ext.MarkdownEditToolbarItemQuote,
+        ext.MarkdownEditToolbarItemCode,
         ext.MarkdownEditToolbarItemLink,
         ext.MarkdownEditToolbarItemImage
     ]

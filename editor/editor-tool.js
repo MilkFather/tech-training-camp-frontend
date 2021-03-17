@@ -175,6 +175,18 @@ export class MarkdownEditToolbarItemQuote extends MarkdownEditToolbarItem {
     }
 }
 
+export class MarkdownEditToolbarItemCode extends MarkdownEditToolbarItem {
+    constructor(editor) {
+        super(editor, '插入代码块', false);
+        this.el.addEventListener('click', this.addCode);
+        this.icon.style.backgroundImage = 'linear-gradient(transparent,transparent),url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22%3E%3Ctitle%3Emarkup%3C/title%3E%3Cpath d=%22M6.5 3.5L0 10l1.5 1.5 5 5L8 15l-5-5 5-5zm7 0L12 5l5 5-5 5 1.5 1.5L20 10z%22/%3E%3C/svg%3E")'
+    }
+
+    addCode = () => {
+        this.editor.insertText('```\nconsole.log(\'hello, world!\')\n```\n');
+    }
+}
+
 export class MarkdownEditToolbarItemLink extends MarkdownEditToolbarItem {
     constructor(editor) {
         super(editor, '插入外部链接', false);
