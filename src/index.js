@@ -14,6 +14,7 @@ let extensions = [
     ext.MarkdownEditToolbarItemH6,
     ext.MarkdownEditToolbarItemBold,
     ext.MarkdownEditToolbarItemItalic,
+    ext.MarkdownEditToolbarItemDel,
     ext.MarkdownEditToolbarItemUList,
     ext.MarkdownEditToolbarItemOList,
     ext.MarkdownEditToolbarItemQuote,

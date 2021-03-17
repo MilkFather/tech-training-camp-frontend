@@ -135,7 +135,19 @@ export class MarkdownEditToolbarItemItalic extends MarkdownEditToolbarItem {
     }
 
     addItalic = () => {
-        this.editor.insertText('*斜体文字*');
+        this.editor.insertText('_斜体文字_');
+    }
+}
+
+export class MarkdownEditToolbarItemDel extends MarkdownEditToolbarItem {
+    constructor(editor) {
+        super(editor, '插入删除记号', false);
+        this.el.addEventListener('click', this.addDel);
+        this.icon.style.backgroundImage = 'linear-gradient(transparent,transparent),url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22%3E%3Ctitle%3Estrikethrough%3C/title%3E%3Cpath d=%22M5.928 8H8.59L10 3.979 11.41 8h2.662l-2.357-6h-3.43zM1 10v2h3.357L2 18h3.06l1.622-4.566h6.636L14.94 18H18l-2.357-6H19v-2z%22/%3E%3C/svg%3E")'
+    }
+
+    addDel = () => {
+        this.editor.insertText('~~删除文字~~');
     }
 }
 
