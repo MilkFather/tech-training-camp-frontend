@@ -23,5 +23,6 @@ export const RE_OLMARKER = /^(\d+)([.)])( +|$)/;
 /* Inline Regex */
 export const RE_EMPH = /(\*(.*?)\*([^*]|$))|(_(.*?)_([^_]|$))/;
 export const RE_STRONG = /(\*\*(.*?)\*\*([^*]|$))|(__(.*?)__([^_]|$))/;
+export const RE_DEL = /~~(.*?)~~/;
 export const RE_IMAGE = /!\[(.*?)\]\((.*?)\)/;
 export const RE_LINK = /\[(.*?)\]\((.*?)\)/;
