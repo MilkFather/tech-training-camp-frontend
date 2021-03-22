@@ -36,3 +36,11 @@ if (urlParams.get('markdownit')) {
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('container').appendChild(editor.el);
 })
+
+window.addEventListener('beforeunload', function(e) {
+    if (!editor.isDirty()) return undefined;
+    var confirmationMessage = '您有尚未保存的更改。您是否要离开页面？';
+
+    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+})

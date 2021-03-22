@@ -22,6 +22,10 @@ export class MarkdownEditor {
         this.preview.setMarkdownFunc = this.parserfunc;
         this.editbox.setListener();
     }
+
+    isDirty() {
+        return this.editbox.dirty;
+    }
 }
 
 class MarkdownPreview {
@@ -56,10 +60,12 @@ class MarkdownEditBox {
         this.el = document.createElement('textarea');
         this.preview = preview;
         this.el.className = 'editor-edit-box';
+        this.dirty = false;
     }
 
     setListener() {
         this.el.addEventListener('input', (event) => {
+            this.dirty = true;
             this.preview.setMarkdown(event.target.value);
         });
     }

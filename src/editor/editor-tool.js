@@ -33,6 +33,7 @@ export class MarkdownEditToolbarItemSave extends MarkdownEditToolbarItem {
     }
 
     saveFile = () => {
+        this.editor.dirty = false;
         let element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.editor.getText()));
         element.setAttribute('download', 'Markdown file.md');
